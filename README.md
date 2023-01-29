@@ -90,5 +90,28 @@ Name of recorded data file. Default value is "log". Powrec will produce followin
 - log.dat  : recorded data, plain ASCII format, comma separated values,
 - log.plot : customized file for Gnuplot showing data plot.
 
+## Runtime options
+After executing, powrec records data in the backgroud providing also simple command line console:
+```
+PowRec 0.0.1
+Enter h - for help
+powrec> h
+powrec commands:
+d: toggle display
+i: print info
+h: help
+q: quit program
 
+powrec> 
+```
+Recording stops after selecting "q" option.
 
+## Data analysis
+Data plot will pop-up after executing gnuplot with produced log.plot file:
+```
+$ gnuplot log.plot
+```
+
+## Data sampling parameters
+INA219 chip provides several options for measurements accuracy, range etc.
+Those options will be slowly added in subsequent releases of powrec.
