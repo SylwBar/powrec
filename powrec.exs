@@ -1,0 +1,1 @@
+PowRec.main(System.argv())
