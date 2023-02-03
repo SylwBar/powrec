@@ -73,11 +73,12 @@ $ mix run powrec.exs opt1 opt2 ...
 Options list could be displayed using -h option:
 ```
 $ mix run powrec.exs -h
-PowRec 0.0.1
-powrec args:
---help,     -h: print help
---int-ms,   -m: sampling interval in ms
---log_name, -l: log name (without suffix)
+PowRec 0.0.2
+Usage: powrec [OPTION [ARGS]]
+ -h, --help      print help
+ -m, --int-ms    sampling interval in ms, default: 100
+ -o, --out       output files prefix, default: out
+ -l, --low       low measurement range: 16V, 0.4 A, default: false
 ```
 
 ## Options
@@ -85,15 +86,20 @@ powrec args:
 Controls how often powrec will read data from INA219 chips. Minimum value is 1 ms. 
 Default value is set to 100ms i.e. 10 current readings per second.
 
-### Log name: --log_name, -l:
-Name of recorded data file. Default value is "log". Powrec will produce following files based on this parameter:
-- log.dat  : recorded data, plain ASCII format, comma separated values,
-- log.plot : customized file for Gnuplot showing data plot.
+### Out name: --out, -o:
+Name of recorded data file. Default value is "out". Powrec will produce following files based on this parameter:
+- out.dat  : recorded data, plain ASCII format, comma separated values,
+- out.plot : customized file for Gnuplot showing data plot.
+
+### Low measurement range: --low, -l:
+PowRec uses two default modes from INA219 driver library:
+* 16V/0.4A range (low mode),
+* 32V/2A range (default mode).
 
 ## Runtime options
 After executing, powrec records data in the backgroud providing also simple command line console:
 ```
-PowRec 0.0.1
+PowRec 0.0.2
 Enter h - for help
 powrec> h
 powrec commands:
@@ -115,3 +121,11 @@ $ gnuplot log.plot
 ## Data sampling parameters
 INA219 chip provides several options for measurements accuracy, range etc.
 Those options will be slowly added in subsequent releases of powrec.
+
+## Acknowledgements
+PowRec uses:
+* INA219 driver for Elixir: https://hex.pm/packages/ina219
+* Circuits I2C driver: https://hex.pm/packages/circuits_i2c
+* Elixir ALE: https://hex.pm/packages/elixir_ale
+
+
