@@ -10,8 +10,8 @@ defmodule PowRec do
   end
 
   defp run(opts) do
-    {:ok, logger_pid} = PowRec.Logger.start(opts.log_name)
-    {:ok, channel_pid} = PowRec.Channel.start(logger_pid)
+    {:ok, logger_pid} = PowRec.Logger.start(opts.out_name)
+    {:ok, channel_pid} = PowRec.Channel.start(logger_pid, opts)
     {:ok, display_pid} = PowRec.Display.start(channel_pid)
 
     :timer.send_interval(opts.int_ms, channel_pid, :tick)
@@ -54,9 +54,18 @@ defmodule PowRec do
   end
 
   defp print_info(opts) do
+    {volt_range, amps_range} =
+      if opts.low do
+        {16, 0.4}
+      else
+        {32, 2.0}
+      end
+
     IO.puts("""
-    powrec runtime information:
-    sampling interval: #{opts.int_ms} ms
+    PowRec runtime information:
+    Sampling interval: #{opts.int_ms} ms
+    Voltage range: #{volt_range} V
+    Current range: #{amps_range} A
     """)
   end
 end

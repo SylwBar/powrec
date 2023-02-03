@@ -1,11 +1,18 @@
 defmodule PowRec.Channel do
   use GenServer
 
-  def start(logger_pid) do
+  def start(logger_pid, opts) do
     try do
       {:ok, i2c_conn} = Wafer.Driver.Circuits.I2C.acquire(bus_name: "i2c-1", address: 0x40)
       {:ok, i2c_conn} = INA219.acquire(conn: i2c_conn, current_divisor: 20, power_divisor: 1)
-      {:ok, i2c_conn} = INA219.calibrate_16V_400mA(i2c_conn)
+
+      {:ok, i2c_conn} =
+        if opts.low do
+          INA219.calibrate_16V_400mA(i2c_conn)
+        else
+          INA219.calibrate_32V_2A(i2c_conn)
+        end
+
       GenServer.start(PowRec.Channel, [logger_pid, i2c_conn])
     rescue
       e in MatchError -> e.term

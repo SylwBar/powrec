@@ -1,6 +1,7 @@
 defmodule PowRec.Opts do
   @def_int_ms 100
-  @def_log_name "log"
+  @def_out_name "out"
+  @def_low false
 
   def parse(argv) do
     try do
@@ -9,12 +10,14 @@ defmodule PowRec.Opts do
           strict: [
             help: :boolean,
             int_ms: :integer,
-            log_name: :string
+            out: :string,
+            low: :boolean
           ],
           aliases: [
             h: :help,
             m: :int_ms,
-            l: :log_name
+            o: :out,
+            l: :low
           ]
         )
 
@@ -23,7 +26,8 @@ defmodule PowRec.Opts do
       else
         opts = %{
           int_ms: :proplists.get_value(:int_ms, opt_list, @def_int_ms),
-          log_name: :proplists.get_value(:log_name, opt_list, @def_log_name)
+          out_name: :proplists.get_value(:out, opt_list, @def_out_name),
+          low: :proplists.get_value(:low, opt_list, @def_low)
         }
 
         {:ok, opts}
@@ -36,10 +40,11 @@ defmodule PowRec.Opts do
 
   def print_help() do
     IO.puts("""
-    powrec args:
-    --help,     -h: print help
-    --int-ms,   -m: sampling interval in ms
-    --log_name, -l: log name (without suffix)
+    Usage: powrec [OPTION [ARGS]]
+     -h, --help      print help
+     -m, --int-ms    sampling interval in ms, default: #{@def_int_ms}
+     -o, --out       output files prefix, default: #{@def_out_name}
+     -l, --low       low measurement range: 16V, 0.4 A, default: #{@def_low}
     """)
   end
 end
