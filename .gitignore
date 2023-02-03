@@ -22,3 +22,6 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 powrec-*.tar
 
+# Ignore powrec output files
+*.dat
+*.plot
