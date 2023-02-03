@@ -8,10 +8,8 @@ defmodule PowRec.Channel do
 
       {:ok, i2c_conn} =
         if opts.low do
-          IO.puts("low mode")
           INA219.calibrate_16V_400mA(i2c_conn)
         else
-          IO.puts("high mode")
           INA219.calibrate_32V_2A(i2c_conn)
         end
 
