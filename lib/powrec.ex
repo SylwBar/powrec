@@ -10,13 +10,20 @@ defmodule PowRec do
   end
 
   defp run(opts) do
-    {:ok, logger_pid} = PowRec.Logger.start(opts.out_name)
-    {:ok, channel_pid} = PowRec.Channel.start(logger_pid, opts)
-    {:ok, display_pid} = PowRec.Display.start(channel_pid)
-
-    :timer.send_interval(opts.int_ms, channel_pid, :tick)
-    IO.puts("Enter h - for help")
-    command_loop(%{display_pid: display_pid, opts: opts})
+    try do
+      {:ok, logger_pid} = PowRec.Logger.start(opts.out_name)
+      {:ok, channel_pid} = PowRec.Channel.start(logger_pid, opts)
+      {:ok, display_pid} = PowRec.Display.start(channel_pid)
+      # the t(r)ick
+      :timer.send_interval(opts.int_ms, channel_pid, :tick)
+      IO.puts("Enter h - for help")
+      command_loop(%{display_pid: display_pid, opts: opts})
+    rescue
+      e in MatchError ->
+        case e.term do
+          {:i2c_error, error} -> IO.puts("I2C error: #{error}")
+        end
+    end
   end
 
   defp command_loop(args) do
@@ -63,7 +70,8 @@ defmodule PowRec do
 
     IO.puts("""
     PowRec runtime information:
-    Sampling interval: #{opts.int_ms} ms
+    INA219 I2C address: #{opts.addr}
+    Sampling interval:  #{opts.int_ms} ms
     Voltage range: #{volt_range} V
     Current range: #{amps_range} A
     """)

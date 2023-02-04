@@ -2,6 +2,7 @@ defmodule PowRec.Opts do
   @def_int_ms 100
   @def_out_name "out"
   @def_low false
+  @def_addr 64
 
   def parse(argv) do
     try do
@@ -11,13 +12,15 @@ defmodule PowRec.Opts do
             help: :boolean,
             int_ms: :integer,
             out: :string,
-            low: :boolean
+            low: :boolean,
+            addr: :integer
           ],
           aliases: [
             h: :help,
             m: :int_ms,
             o: :out,
-            l: :low
+            l: :low,
+            a: :addr
           ]
         )
 
@@ -27,7 +30,8 @@ defmodule PowRec.Opts do
         opts = %{
           int_ms: :proplists.get_value(:int_ms, opt_list, @def_int_ms),
           out_name: :proplists.get_value(:out, opt_list, @def_out_name),
-          low: :proplists.get_value(:low, opt_list, @def_low)
+          low: :proplists.get_value(:low, opt_list, @def_low),
+          addr: :proplists.get_value(:addr, opt_list, @def_addr)
         }
 
         {:ok, opts}
@@ -45,6 +49,7 @@ defmodule PowRec.Opts do
      -m, --int-ms    sampling interval in ms, default: #{@def_int_ms}
      -o, --out       output files prefix, default: #{@def_out_name}
      -l, --low       low measurement range: 16V, 0.4 A, default: #{@def_low}
+     -a, --addr      INA219 I2C address, default: #{@def_addr}
     """)
   end
 end
