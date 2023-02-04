@@ -73,12 +73,13 @@ $ mix run powrec.exs opt1 opt2 ...
 Options list could be displayed using -h option:
 ```
 $ mix run powrec.exs -h
-PowRec 0.0.2
+PowRec 0.0.3
 Usage: powrec [OPTION [ARGS]]
  -h, --help      print help
  -m, --int-ms    sampling interval in ms, default: 100
  -o, --out       output files prefix, default: out
  -l, --low       low measurement range: 16V, 0.4 A, default: false
+ -a, --addr      INA219 I2C address, default: 64
 ```
 
 ## Options
@@ -96,10 +97,14 @@ PowRec uses two default modes from INA219 driver library:
 * 16V/0.4A range (low mode),
 * 32V/2A range (default mode).
 
+### I2C address selection: --addr, -a:
+INA219 chip could be selected using I2C address value. Decimal values are required. Predefined INA219 addresses could be: 64, 65, 66, 67.
+Default is 64 (0x40 hex).
+
 ## Runtime options
 After executing, powrec records data in the backgroud providing also simple command line console:
 ```
-PowRec 0.0.2
+PowRec 0.0.3
 Enter h - for help
 powrec> h
 powrec commands:
@@ -122,10 +127,12 @@ $ gnuplot log.plot
 INA219 chip provides several options for measurements accuracy, range etc.
 Those options will be slowly added in subsequent releases of powrec.
 
+## Support for multiple INA219 boards.
+Currently PowRec is not supporting recording data from multiple INA219 chips at the same time.
+It is possible to run multiple PowRec instances attached do different chips (--addr option).
+
 ## Acknowledgements
 PowRec uses:
 * INA219 driver for Elixir: https://hex.pm/packages/ina219
 * Circuits I2C driver: https://hex.pm/packages/circuits_i2c
 * Elixir ALE: https://hex.pm/packages/elixir_ale
-
-
