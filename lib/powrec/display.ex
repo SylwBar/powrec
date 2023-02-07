@@ -31,8 +31,20 @@ defmodule PowRec.Display do
 
   @impl true
   def handle_info(:display_tick, state) do
-    current = PowRec.Channel.get_measurements(state.channel_pid)
-    IO.write("ch1: #{current} mA   \r")
+    {current, voltage} = PowRec.Channel.get_measurements(state.channel_pid)
+    current_str = get_current_str(current)
+    voltage_str = get_voltage_str(voltage)
+    IO.write("ch1: " <> current_str <> ", " <> voltage_str <> "   \r")
     {:noreply, state}
+  end
+
+  defp get_current_str(current) do
+    ra = :erlang.float_to_binary(current, decimals: 1)
+    "#{ra} mA"
+  end
+
+  defp get_voltage_str(voltage) do
+    rv = :erlang.float_to_binary(voltage, decimals: 3)
+    "#{rv} V"
   end
 end

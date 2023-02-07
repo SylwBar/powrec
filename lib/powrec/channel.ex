@@ -24,26 +24,27 @@ defmodule PowRec.Channel do
   end
 
   def get_measurements(channel_pid) do
-    GenServer.call(channel_pid, :get_meas)
+    GenServer.call(channel_pid, :get_measurements)
   end
 
   # ----- PowRec.Channel callbacks -----
 
   @impl true
   def init([logger_pid, i2c_conn]) do
-    {:ok, %{logger_pid: logger_pid, i2c_conn: i2c_conn, measurements: 0}}
+    {:ok, %{logger_pid: logger_pid, i2c_conn: i2c_conn, current: nil, voltage: nil}}
   end
 
   @impl true
   def handle_info(:tick, state) do
+    {:ok, voltage} = INA219.bus_voltage(state.i2c_conn)
     {:ok, current} = INA219.current(state.i2c_conn)
     time = System.monotonic_time(:microsecond)
-    send(state.logger_pid, {:measurement, time, current})
-    {:noreply, %{state | measurements: current}}
+    send(state.logger_pid, {:measurement, time, current, voltage})
+    {:noreply, %{state | current: current, voltage: voltage}}
   end
 
   @impl true
-  def handle_call(:get_meas, _from, state) do
-    {:reply, state.measurements, state}
+  def handle_call(:get_measurements, _from, state) do
+    {:reply, {state.current, state.voltage}, state}
   end
 end

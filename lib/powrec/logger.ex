@@ -20,9 +20,13 @@ defmodule PowRec.Logger do
   end
 
   @impl true
-  def handle_info({:measurement, time, current}, state) do
+  def handle_info({:measurement, time, current, voltage}, state) do
     entry_time = time - state.init_time
-    IO.binwrite(state.log_handle, "#{entry_time / 1_000_000}, #{current}\n")
+    str_t = (entry_time / 1_000_000) |> :erlang.float_to_binary(decimals: 6)
+    str_a = current |> :erlang.float_to_binary(decimals: 1)
+    str_v = voltage |> :erlang.float_to_binary(decimals: 3)
+
+    IO.binwrite(state.log_handle, "#{str_t}, #{str_a}, #{str_v}\n")
     {:noreply, state}
   end
 end
