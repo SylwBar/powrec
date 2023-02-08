@@ -12,9 +12,9 @@ It is possible to log current data with 1ms sampling rate.
 
 The tool is not able to display any data by itself, but it prepares necessary files that could be loaded by Gnuplot.
 
-Example capture of some MCU power consumtion measured with 1ms sampling rate (units: second and mA):
+Example capture of some MCU power consumtion measured with 1ms sampling rate:
 
-![example](https://user-images.githubusercontent.com/8614048/215347579-e108aa01-b94b-4d97-b512-a06bd7e9af9d.png)
+![powrec](https://user-images.githubusercontent.com/8614048/217629233-85f9b7ff-3db9-41f5-8b61-7f4e1e3125c2.png)
 
 PowRec is designed to run on Raspberry PI.
 Tested Raspberry PIs and OSes:
