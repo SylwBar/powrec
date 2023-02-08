@@ -14,6 +14,7 @@ defmodule PowRec do
       {:ok, logger_pid} = PowRec.Logger.start(opts.out_name)
       {:ok, channel_pid} = PowRec.Channel.start(logger_pid, opts)
       {:ok, display_pid} = PowRec.Display.start(channel_pid)
+      PowRec.Gnuplot.write_plot(opts)
       # the t(r)ick
       :timer.send_interval(opts.int_ms, channel_pid, :tick)
       IO.puts("Enter h - for help")
@@ -41,7 +42,6 @@ defmodule PowRec do
         command_loop(args)
 
       "q" ->
-        PowRec.Gnuplot.write_plot(args.opts)
         :ok
 
       cmd ->

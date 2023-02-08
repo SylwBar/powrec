@@ -1,7 +1,7 @@
 defmodule PowRec.Gnuplot do
   def write_plot(opts) do
-    plot_i_file_name = opts.out_name <> "_I.plot"
-    plot_u_file_name = opts.out_name <> "_U.plot"
+    plot_i_file_name = opts.out_name <> "_mA.plot"
+    plot_u_file_name = opts.out_name <> "_V.plot"
     log_file_name = opts.out_name <> ".dat"
 
     case File.open(plot_i_file_name, [:write]) do
