@@ -73,7 +73,7 @@ $ mix run powrec.exs opt1 opt2 ...
 Options list could be displayed using -h option:
 ```
 $ mix run powrec.exs -h
-PowRec 0.0.3
+PowRec 0.0.4
 Usage: powrec [OPTION [ARGS]]
  -h, --help      print help
  -m, --int-ms    sampling interval in ms, default: 100
@@ -89,8 +89,9 @@ Default value is set to 100ms i.e. 10 current readings per second.
 
 ### Out name: --out, -o:
 Name of recorded data file. Default value is "out". Powrec will produce following files based on this parameter:
-- out.dat  : recorded data, plain ASCII format, comma separated values,
-- out.plot : customized file for Gnuplot showing data plot.
+- out.dat     : recorded data, plain ASCII format, comma separated values,
+- out_mA.plot : Gnuplot file presenting current data plot,
+- out_V.plot  : Gnuplot file presenting voltage data plot.
 
 ### Low measurement range: --low, -l:
 PowRec uses two default modes from INA219 driver library:
@@ -104,7 +105,7 @@ Default is 64 (0x40 hex).
 ## Runtime options
 After executing, powrec records data in the backgroud providing also simple command line console:
 ```
-PowRec 0.0.3
+PowRec 0.0.4
 Enter h - for help
 powrec> h
 powrec commands:
@@ -113,14 +114,23 @@ i: print info
 h: help
 q: quit program
 
-powrec> 
+powrec> d
+powrec> ch1: 21.7 mA, 4.164 V
+powrec> i
+PowRec runtime information:
+INA219 I2C address: 64
+Sampling interval:  100 ms
+Voltage range: 32 V
+Current range: 2.0 A
+powrec>
 ```
 Recording stops after selecting "q" option.
 
 ## Data analysis
 Data plot will pop-up after executing gnuplot with produced log.plot file:
 ```
-$ gnuplot log.plot
+$ gnuplot out_mA.plot &
+$ gnuplot out_V.plot &
 ```
 
 ## Data sampling parameters
